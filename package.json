@@ -1,0 +1,62 @@
+{
+  "name": "@papara/papara",
+  "version": "1.0.0",
+  "description": "Node JS library for papara merchant api.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
+    "prepare": "npm run build",
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "eslint --fix src/**/*.ts",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/papara/papara-node.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/papara/papara-node/issues"
+  },
+  "homepage": "https://github.com/papara/papara-node#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.2",
+    "@typescript-eslint/eslint-plugin": "^2.1.0",
+    "@typescript-eslint/parser": "^2.1.0",
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^4.3.0",
+    "jest": "^25.5.4",
+    "lint-staged": "^10.4.0",
+    "prettier": "^1.18.2",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.4.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^4.0.3",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
