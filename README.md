@@ -26,6 +26,15 @@ Integrating Papara into your software requires following;
 
 2. Install client library. So your integration can interact with the Papara API. Install operations are like following.
 
+# Configuration
+
+Sample usage:
+
+```js
+const client = new PaparaClient("YOUR_API_KEY");
+const result = await client.accountService.getAccount();
+```
+
 ## Installation
 
 ```bash

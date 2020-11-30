@@ -26,6 +26,15 @@ Papara ile entegre olmak için aşağıdaki adımları takip edebilirsiniz;
 
 2. Kütüphaneyi kurun. Böylece yazılımınız Papara API ile entegre olabilir. Kurulum işlemleri aşağıdaki gibidir.
 
+# Konfigürasyon
+
+Örnek kullanım:
+
+```js
+const client = new PaparaClient("API_ANAHTARINIZ");
+const result = await client.accountService.getAccount();
+```
+
 ## Installation
 
 ```bash
