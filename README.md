@@ -39,107 +39,6 @@ or
 yarn add @papara/papara
 ```
 
-# Configurations
-
-## Setup
-
-Dependency injection can be used for setting up the client. API Key and Environment variable will be read from `appsettings.json` file.
-
-```typescript
-private readonly  IPaparaClient PaparaClient;
-public AccountController(IPaparaClient  paparaClient)
-{
-    this.PaparaClient  = paparaClient;      
-}
-```
-
-Another way to set up client is to construct manually.
-
-```typescript
-private readonly  PaparaClient paparaClient;         
-
-public AccountController()
-{
-    paparaClient = new PaparaClient("INSERT_YOUR_API_KEY_HERE",PaparaEnv.Test);
-} 
-```
-
-Or, `SetOptions` method can be used. API Key and Environment variable will be read from `appsettings.json` file.
-
-```typescript
-PaparaClient  paparaClient = new PaparaClient();  
-paparaClient.SetOptions("INSERT_YOUR_API_KEY_HERE", PaparaEnv.Test);
-```
-
-### Dotnet Core API Test Request 
-
-After everything is set, use code block below to test everything works perfectly. 
-
-```typescript
-private readonly  IPaparaClient PaparaClient;
-
-public  AccountController(IPaparaClient paparaClient)
-{        
-    this.PaparaClient  = paparaClient;
-}       
-
-[HttpGet("[action]")]  
-public async  Task<ActionResult<Account>> GetAccount()   
-{    
-    PaparaSingleResult<Account>  accountResult = await this.PaparaClient.AccountService.GetAccountAsync();
-    if(accountResult.Succeeded) 
-    {         
-        Account account =  accountResult.Data; 
-        return  Ok(account);  
-    }     
-    else     
-    {    
-        return  BadRequest(accountResult.Error);  
-    }   
-}  
-```
-
-
-
-*Note: Please keep that in mind that all methods in client have both synchronous and asynchronous versions.* 
-
-E.G `await this.PaparaClient.AccountService.GetAccountAsync()` and `this.PaparaClient.AccountService.GetAccount();` 
-
-## .NET Framework Setup
-
-For .NET Framework developers, insert `ApiKey` and `Env` variables into `web.config` file under `appSettings` section.
-
-``` xml  
-<add key="Papara:ApiKey" value="INSERT_YOUR_API_KEY_HERE"/>
-
-<add key="Papara:Env" value="Test"/>
-```
-
-### .NET Framework API Test Request
-
-After everything is set, use code block below to test everything works perfectly for .Net Framework. 
-
-``` typescript
-private readonly PaparaClient paparaClient;
-
-public AccountController()
-{
-    paparaClient = new PaparaClient(ConfigurationManager.AppSettings["Papara:ApiKey"], PaparaEnv.Test);
-}
-
-public JsonResult<Account> GetAccount()
-{
-    var accountResult = this.paparaClient.AccountService.GetAccount();
-
-    if (!accountResult.Succeeded)
-    {
-        throw new Exception(accountResult.Error.Message);
-    }
-
-    return Json(accountResult.Data);
-}
-```
-
 # <a name="enums">Enums</a>
 
 # CashDepositProvisionStatus
@@ -341,7 +240,7 @@ function listLedgers() {
 
 ## Get Settlement
 
-Calculates the count and volume of transactions within the given time period. To perform this operation use `getSettlement` method on `Account` service. `startDate` and `endDate` should be provided.
+Calculates the count and volume of transactions within the given time period. To perform this operation use `GetSettlement` method on `Account` service. `startDate` and `endDate` should be provided.
 
 ### Settlement Model
 
@@ -693,56 +592,6 @@ Creates a request to deposit money from the physical point using national identi
 | merchantReference | string   | Returns merchant reference code          |
 | userFullName      | string   | Returns end user's full name             |
 
-### CashDepositToTcknOptions
-
-`CashDepositTcknControlOptions` is used by cash deposit service for providing request parameters. 
-
-| **Variable Name** | **Type** | **Description**                                              |
-| ----------------- | -------- | ------------------------------------------------------------ |
-| tckn              | number   | Gets or sets national identity number  which is linked to user's Papara account |
-| amount            | number   | Gets or sets amount. The amount of the  cash deposit. This amount will be transferred to the account of the user who  received the payment. The amount to be deducted from the merchant account  will be exactly this number. |
-| merchantReference | string   | Gets or sets merchant reference. The  unique value sent by the merchant to prevent false repetitions in cash loading  transactions. If a previously submitted and successful merchantReference is  resubmitted with a new request, the request will fail. MerchantReference sent  with failed requests can be resubmitted. |
-
-### Service Method
-
-#### Purpose
-
-Creates a cash deposit request without upfront payment using end user's national identity number.
-
-| **Method**              | **Params**               | **Return Type**                          |
-| ----------------------- | ------------------------ | ---------------------------------------- |
-| createProvisionWithTckn | CashDepositToTcknOptions | PaparaSingleResult<CashDepositProvision> |
-
-#### Usage
-
-```typescript
-function createProvisionWithTckn() {
-    const result = await client.cashDepositService.createProvisionWithTckn({
-    	amount: 10,
-    	merchantReference: uuidv4(),
-   		tckn: config.TCKN
-  	});
-    return result;
-}
-```
-
-## Create Cash Deposit Provision Control With National Identity Number
-
-Creates a request to deposit money from the physical point using national identity number registered in Papara without provision. To perform this operation use `createProvisionWithTcknControl` on `Cash Deposit` service. `phoneNumber`, `tckn`, `amount` and `merchantReference` should be provided.
-
-### CashDepositProvision Model
-
-`CashDepositProvision` is used by cash deposit service to match returning cash deposit provision values from API.
-
-| **Variable Name** | **Type** | **Description**                          |
-| ----------------- | -------- | ---------------------------------------- |
-| id                | number   | Gets or sets cash deposit ID             |
-| createdAt         | string   | Gets or setscreated date of cash deposit |
-| amount            | number   | Gets or sets amount of cash deposit      |
-| currency          | number   | Gets or sets currency of cash deposit    |
-| merchantReference | string   | Returns merchant reference code          |
-| userFullName      | string   | Returns end user's full name             |
-
 ### CashDepositTcknControlOptions
 
 `CashDepositTcknControlOptions` is used by cash deposit service for providing request parameters. 
@@ -760,15 +609,15 @@ Creates a request to deposit money from the physical point using national identi
 
 Creates a cash deposit request without upfront payment using end user's national identity number.
 
-| **Method**                     | **Params**                    | **Return Type**                          |
-| ------------------------------ | ----------------------------- | ---------------------------------------- |
-| createProvisionWithTcknControl | CashDepositTcknControlOptions | PaparaSingleResult<CashDepositProvision> |
+| **Method**              | **Params**                    | **Return Type**                          |
+| ----------------------- | ----------------------------- | ---------------------------------------- |
+| createProvisionWithTckn | CashDepositTcknControlOptions | PaparaSingleResult<CashDepositProvision> |
 
 #### Usage
 
 ```typescript
-function createProvisionWithTcknControl() {
-    const result = await client.cashDepositService.createProvisionWithTcknControl({
+function createProvisionWithTckn() {
+    const result = await client.cashDepositService.createProvisionWithTckn({
         amount: 10,
         merchantReference: uuidv4(), //random number generator method, place actual merchant reference here
         phoneNumber: config.PersonalPhoneNumber,
@@ -777,8 +626,6 @@ function createProvisionWithTcknControl() {
     return result;
 }
 ```
-
-
 
 ## Create Cash Deposit Provision With Phone Number
 
@@ -834,127 +681,40 @@ function createProvisionWithAccountNumber() {
 }
 ```
 
-## Create Cash Deposit Provision With National Identity Number
+## Cash Deposit Approval
 
-Creates a request to deposit money from the physical point using national identity number registered in Papara without provision. To perform this operation use `createProvisionWithTcknControl` on `Cash Deposit` service. `phoneNumber`, `tckn`, `amount` and `merchantReference` should be provided.
+With the reference code created by the user, it checks the request for deposit without a prepayment from the physical point and makes it ready for approval.  To perform this operation, use `createProvisionByReferenceControl` on `Cash Deposit` service. `referenceCode` and `amount` should be provided.
 
-### CashDepositProvision Model
+### CashDepositControlOptions
 
-`CashDepositProvision` is used by cash deposit service to match returning cash deposit provision values from API.
+`CashDepositControlOptions` is used by cash deposit service for providing request parameters.
 
-| **Variable Name** | **Type** | **Description**                          |
-| ----------------- | -------- | ---------------------------------------- |
-| id                | number   | Gets or sets cash deposit ID             |
-| createdAt         | string   | Gets or setscreated date of cash deposit |
-| amount            | number   | Gets or sets amount of cash deposit      |
-| currency          | number   | Gets or sets currency of cash deposit    |
-| merchantReference | string   | Returns merchant reference code          |
-| userFullName      | string   | Returns end user's full name             |
-
-### CashDepositTcknControlOptions
-
-`CashDepositTcknControlOptions` is used by cash deposit service for providing request parameters. 
-
-| **Variable Name** | **Type** | **Description**                                              |
-| ----------------- | -------- | ------------------------------------------------------------ |
-| tckn              | number   | Gets or sets national identity number  which is linked to user's Papara account |
-| amount            | number   | Gets or sets amount. The amount of the  cash deposit. This amount will be transferred to the account of the user who  received the payment. The amount to be deducted from the merchant account  will be exactly this number. |
-| merchantReference | string   | Gets or sets merchant reference. The  unique value sent by the merchant to prevent false repetitions in cash loading  transactions. If a previously submitted and successful merchantReference is  resubmitted with a new request, the request will fail. MerchantReference sent  with failed requests can be resubmitted. |
+| **Variable Name** | **Type** | **Description**                                        |
+| ----------------- | -------- | ------------------------------------------------------ |
+| referenceCode     | number   | Gets or sets reference number of cash  deposit request |
+| amount            | string   | Gets or sets cash deposit amount                       |
 
 ### Service Method
 
 #### Purpose
 
-Creates a cash deposit request without upfront payment using end user's national identity number.
+Makes a cash deposit ready to be completed.
 
-| **Method**                     | **Params**                    | **Return Type**                          |
-| ------------------------------ | ----------------------------- | ---------------------------------------- |
-| createProvisionWithTcknControl | CashDepositTcknControlOptions | PaparaSingleResult<CashDepositProvision> |
+| **Method**                        | **Params**                | **Return Type**         |
+| --------------------------------- | ------------------------- | ----------------------- |
+| createProvisionByReferenceControl | CashDepositControlOptions | PaparaSingleResult<any> |
 
 #### Usage
 
 ```typescript
-function createProvisionWithTcknControl() {
-    const result = await client.cashDepositService.createProvisionWithTcknControl({
-        amount: 10,
+function createProvisionByReferenceControl() {
+  	const result = await client.cashDepositService.createProvisionWithAccountNumber({
+		amount: 10,
         merchantReference: uuidv4(), //random number generator method, place actual merchant reference here
-        phoneNumber: config.PersonalPhoneNumber,
-        tckn: config.TCKN
+        accountNumber: config.PersonalAccountNumber
     });
     return result;
 }
-```
-
-
-
-## Cash Deposit Provision Control By Reference Code
-
-With the reference code created by the user, it checks the deposit request without prepayment from the physical point and makes it ready to be approved. To perform this operation, use `provisionByReferenceControl` on `Cash Deposit` service. `referenceCode` and `amount` should be provided.
-
-### Service Method
-
-#### Purpose
-
-Makes  a cash deposit request ready to be completed without upfront payment.
-
-| **Method**                  | **Params**                | **Return Type**                    |
-| --------------------------- | ------------------------- | ---------------------------------- |
-| provisionByReferenceControl | CashDepositControlOptions | PaparaResult<CashDepositProvision> |
-
-#### Usage
-
-```php
-  /**
-   * Makes a cash deposit ready to be complete
-   *
-   * @param CashDepositControlOptions $options
-   * @return PaparaResult
-   */
-  public function controlProvisionByReference()
-  {
-    var completionResult = await client.cashDepositService.provisionByReferenceControl(
-    {
-      amount: 10,
-      referenceCode: result.data.merchantReference
-    });
-    return result;
-  }
-```
-
-
-
-## Complete Cash Deposit Provision By Reference Code
-
-With the reference code created by the user, it approves the deposit request without prepayment from the physical point and transfers the balance to the user. To perform this operation, use `provisionByReferenceComplete` on `Cash Deposit` service. `referenceCode` and `amount` should be provided.
-
-### Service Method
-
-#### Purpose
-
-Completes a cash deposit request without upfront payment.
-
-| **Method**                   | **Params**                | **Return Type**                    |
-| ---------------------------- | ------------------------- | ---------------------------------- |
-| provisionByReferenceComplete | CashDepositControlOptions | PaparaResult<CashDepositProvision> |
-
-#### Usage
-
-```php
-  /**
-   * Completes a cash deposit request without upfront payment
-   *
-   * @param CashDepositControlOptions $options
-   * @return PaparaResult
-   */
-  public function completeProvisionByReference()
-  {
-    var completionResult = await client.cashDepositService.provisionByReferenceComplete(
-    {
-      amount: 10,
-      referenceCode: result.data.merchantReference
-    });
-    return $result;
-  }
 ```
 
 ## Cash Deposit Completion
@@ -984,10 +744,18 @@ Completes a cash deposit request without upfront payment.
 
 ```typescript
 function completeProvision() {
+    // create provision
+	const result = await client.cashDepositService.createProvisionWithAccountNumber({
+		amount: 10,
+      	merchantReference: uuidv4(), //random number generator method, place actual merchant reference here
+     	accountNumber: config.PersonalAccountNumber
+    });
+    
+  // complete provision
     var completionResult = await client.cashDepositService.completeProvision({
-   		id: result.data.id,
-    	transactionDate: result.data.createdAt
-  	});
+        id: result.data.id,
+        transactionDate: result.data.createdAt
+    });
     return result;
 }
 ```
@@ -1031,7 +799,7 @@ function getCashDepositByDate() {
 }
 ```
 
-## Provision Settlements
+## Settlements
 
 Returns the total number and volume of transactions performed within the given dates. Both start and end dates are included in the calculation. To perform this operation, use `provisionSettlements` on `Cash Deposit` service. `startDate` and `endDate` should be provided.
 
@@ -1066,46 +834,6 @@ function provisionSettlements() {
     return result;
 }
 ```
-
-
-
-## Settlements
-
-Returns the total number and volume of transactions performed within the given dates. Both start and end dates are included in the calculation. To perform this operation, use ` settlements `on `Cash Deposit` service. `startDate` and `endDate` should be provided.
-
-### CashDepositSettlementOptions
-
-`CashDepositSettlementOptions` is used by cash deposit service for providing request parameters.
-
-| **Variable Name** | **Type**   | **Description**                        |
-| ----------------- | ---------- | -------------------------------------- |
-| startDate         | string     | Gets or sets start date for settlement |
-| endDate           | string     | Gets or sets end date for settlement   |
-| entryType         | EntryType? | Gets or sets entry type for settlement |
-
-### Service Method
-
-#### Purpose
-
-Returns total transaction volume and count between given dates. Start and end dates are included.
-
-| **Method**  | **Params**                   | **Return Type**                           |
-| ----------- | ---------------------------- | ----------------------------------------- |
-| settlements | CashDepositSettlementOptions | PaparaSingleResult<CashDepositSettlement> |
-
-#### Usage
-
-```typescript
-function settlements() {
-    var result = await client.cashDepositService.settlements({
-    	startDate: new Date(2020, 1, 1).toISOString(),
-   		endDate: new Date().toISOString()
-    });
-    return result;
-}
-```
-
-
 
 ## Possible Errors and Error Codes
 
@@ -1175,43 +903,6 @@ function getMassPayment() {
     return result;
 }
 ```
-
-## Get Mass Payment By Reference
-
-Returns information about the payment distribution process. To perform this operation use `getMassPaymentByReference` method on `MassPayment` service. `reference` should be provided.
-
-### MassPaymentByReferenceOptions
-
-`MassPaymentGetOptions` is used by mass payment service for providing request parameters.
-
-| **Variable Name** | **Type** | **Description**                            |
-| ----------------- | -------- | ------------------------------------------ |
-| reference         | number   | Gets or sets mass payment reference number |
-
-### Service Method
-
-#### Purpose
-
-Returns mass payment information for authorized merchant.
-
-| **Method**                | **Params**                    | **Return Type**                 |
-| ------------------------- | ----------------------------- | ------------------------------- |
-| getMassPaymentByReference | MassPaymentByReferenceOptions | PaparaSingleResult<MassPayment> |
-
-#### Usage
-
-```typescript
-function getMassPaymentByReference() {
-    var result = await client.massPaymentService.getMassPaymentByReference(
-    {
-      reference: "MASS_PAYMENT_ID"
-    }
-  );
-    return result;
-}
-```
-
-
 
 ## Create Mass Payment To Account Number
 
@@ -1417,43 +1108,6 @@ function getPayment() {
     return result;
 }
 ```
-
-
-
-## Get Payment By Payment Reference Number
-
-Returns payment information. To perform this operation use `getByReference` method on `Payment` service. `referenceId` should be provided.
-
-### PaymentGetByReferenceOptions
-
-`PaymentGetOptions` will be used as parameter while acquiring payment information.
-
-| **Variable Name** | **Type** | **Description**                              |
-| ----------------- | -------- | -------------------------------------------- |
-| referenceId       | string   | Gets or sets unique payment reference number |
-
-### Service Method
-
-#### Purpose
-
-Returns payment and balance information for authorized merchant.
-
-| **Method**     | **Params**                   | **Return Type**             |
-| -------------- | ---------------------------- | --------------------------- |
-| getByReference | PaymentGetByReferenceOptions | PaparaSingleResult<Payment> |
-
-#### Usage
-
-```typescript
-function getByReference() {
-    var payment = await client.paymentService.getByReference({
-    	referenceId: 123456
-  	});
-    return result;
-}
-```
-
-
 
 ## Create Payment
 
