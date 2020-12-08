@@ -84,7 +84,7 @@ Giriş Türleri hesap defterlerinde ve para yatırma işlemlerinde parayı takip
 | BankTransfer                  | 1         | Banka Transferi: Para Yatırma veya Çekme                     |
 | CorporateCardTransaction      | 2         | Papara Kurumsal Kart İşlemi: Üye iş yerine tahsis edilen kurum kartı ile gerçekleştirilen işlemdir. |
 | LoadingMoneyFromPhysicalPoint | 6         | Fiziki Noktadan Para Yükleme: Anlaşmalı yerden nakit para yatırma işlemi |
-| MerchantPayment               | 8         | Satıcı Ödemesi: Papara ile Ödeme                             |
+| MerchantPayment               | 8         | Üye iş yeri Ödemesi: Papara ile Ödeme                        |
 | PaymentDistribution           | 9         | Ödeme Dağıtımı: Papara ile toplu ödeme                       |
 | EduPos                        | 11        | Çevrimdışı ödeme. Papara üzerinden EDU POS                   |
 
@@ -118,7 +118,7 @@ Bu bölüm üye işyerine ait hesap ve bakiye bilgilerinin kullanımı için haz
 
 ## Hesap Bilgilerine Erişim
 
-Satıcı hesabı ve bakiye bilgilerini döndürür. Bakiye bilgileri cari bakiyeyi, kullanılabilir ve blokeli bakiyeyi içerirken, hesap bilgileri satıcının marka adını ve tam unvanını içerir. Bu işlemi gerçekleştirmek için `Account` servisinde bulunan `getAccount` methodunu kullanın.
+Üye iş yeri hesabı ve bakiye bilgilerini döndürür. Bakiye bilgileri cari bakiyeyi, kullanılabilir ve blokeli bakiyeyi içerirken, hesap bilgileri üye iş yerinin marka adını ve tam unvanını içerir. Bu işlemi gerçekleştirmek için `Account` servisinde bulunan `getAccount` methodunu kullanın.
 
 ### Account Model
 
@@ -126,10 +126,10 @@ Satıcı hesabı ve bakiye bilgilerini döndürür. Bakiye bilgileri cari bakiye
 
 | **Değişken Adı**    | **Tipi** | **Açıklama**                                                 |
 | ------------------- | -------- | ------------------------------------------------------------ |
-| LegalName           | string   | Satıcının şirket unvanını alır veya belirler.                |
-| BrandName           | string   | Satıcının şirket marka adını alır veya belirler.             |
-| AllowedPaymentTypes | any      | Satıcının şirket için kabul edilen ödeme tiplerini alır veya belirler. |
-| Balances            | any      | Satıcının şirketin hesap bakiyesini alır veya belirler.      |
+| LegalName           | string   | Üye iş yerinin şirket unvanını alır veya belirler.           |
+| BrandName           | string   | Üye iş yerinin şirket marka adını alır veya belirler.        |
+| AllowedPaymentTypes | any      | Üye iş yerinin şirket için kabul edilen ödeme tiplerini alır veya belirler. |
+| Balances            | any      | Üye iş yerinin şirketin hesap bakiyesini alır veya belirler. |
 
 ### AllowedPaymentType Model
 
@@ -154,7 +154,7 @@ Satıcı hesabı ve bakiye bilgilerini döndürür. Bakiye bilgileri cari bakiye
 
 #### Kullanım Amacı
 
-Yetkili satıcı için hesap bilgilerini ve cari bakiyeyi getirir.
+Üye iş yeri için hesap bilgilerini ve cari bakiyeyi getirir.
 
 | **Method** | **Params** | **Return Type**             |
 | ---------- | ---------- | --------------------------- |
@@ -171,7 +171,7 @@ function getAccount() {
 
 ## Hesap Hareketlerini Listeleme
 
-Satıcı hesap hareketlerini(işlem listesi) sayfalı biçimde döndürür. Bu method, her işlem için ortaya çıkan bakiye dahil olmak üzere bir satıcı için yapılan tüm işlemleri listelemek için kullanılır. Bu işlemi gerçekleştirmek için `Account` hizmetinde `listLedgers` methodunu kullanın. `startDate` ve `endDate` bilgileri gönderilmelidir.
+Üye iş yeri hesap hareketlerini(işlem listesi) sayfalı biçimde döndürür. Bu method, her işlem için ortaya çıkan bakiye dahil olmak üzere bir üye iş yeri için yapılan tüm işlemleri listelemek için kullanılır. Bu işlemi gerçekleştirmek için `Account` hizmetinde `listLedgers` methodunu kullanın. `startDate` ve `endDate` bilgileri gönderilmelidir.
 
 ### AccountLedger
 
@@ -217,7 +217,7 @@ Satıcı hesap hareketlerini(işlem listesi) sayfalı biçimde döndürür. Bu m
 | startDate        | string   | İşlemlerin başlangıç tarihini alır veya belirler             |
 | endDate          | string   | İşlemlerin bitiş tarihlerini alır veya belirler              |
 | entryType        | number   | İşlemlerin hareket tiplerini alır veya belirler              |
-| accountNumber    | number   | Satıcı hesap numarasını alır veya belirler                   |
+| accountNumber    | number   | Üye iş yeri hesap numarasını alır veya belirler              |
 | page             | number   | İstenen sayfa numarasını alır veya belirler. İstenen tarihte, istenen PageSize için 1'den fazla sonuç sayfası varsa, bunu sayfalar arasında dönmek için kullanın |
 | pageSize         | number   | Bir sayfada getirilmesi istenen kalem sayısını alır veya belirler. Min=1, Max=50 |
 
@@ -225,7 +225,7 @@ Satıcı hesap hareketlerini(işlem listesi) sayfalı biçimde döndürür. Bu m
 
 #### Kullanım Amacı
 
-Yetkili satıcı için hesap hareketleri listesini döndürür.
+Üye iş yeri için hesap hareketleri listesini döndürür.
 
 | **Method**  | **Params**        | **Return Type**                 |
 | ----------- | ----------------- | ------------------------------- |
@@ -272,7 +272,7 @@ Verilen süre içindeki işlemlerin sayısını ve hacmini hesaplar. Bu işlemi 
 
 #### Kullanım Amacı
 
-Yetkili satıcı için mutabakat bilgilerini getirir.
+Üye iş yeri için mutabakat bilgilerini getirir.
 
 | **Method**    | **Params**           | **Return Type**                |
 | ------------- | -------------------- | ------------------------------ |
@@ -298,27 +298,27 @@ Bu bölümde, banka hesaplarını Papara'da hızlı ve güvenli bir şekilde lis
 
 ## Banka Hesap Bilgilerine Erişim
 
-Satıcı kurumun kayıtlı banka hesaplarını getirir. Bu işlemi gerçekleştirmek için `Banking` servisinde bulunan `GetBankAccounts` methodunu kullanın.
+Üye iş yeri kurumun kayıtlı banka hesaplarını getirir. Bu işlemi gerçekleştirmek için `Banking` servisinde bulunan `GetBankAccounts` methodunu kullanın.
 
 ### BankAccount Model
 
 `BankAccount` sınıfı, `Banking` servisi tarafından API'den dönen banka hesaplarını eşleştirmek için kullanılır
 
-| **Değişken Adı** | **Tipi** | **Açıklama**                                     |
-| ---------------- | -------- | ------------------------------------------------ |
-| bankAccountId    | number   | Satıcının banka hesap ID'sini alır veya belirler |
-| bankName         | string   | Satıcının banka adını alır veya belirler         |
-| branchCode       | string   | Satıcının şube kodunu alır veya belirler         |
-| iban             | string   | IBAN numarasını alır veya belirler               |
-| accountCode      | string   | Satıcının hesap kodunu alır veya belirler        |
-| description      | string   | Açıklamayı alır veya belirler                    |
-| currency         | string   | Para birimini alır veya belirler                 |
+| **Değişken Adı** | **Tipi** | **Açıklama**                                          |
+| ---------------- | -------- | ----------------------------------------------------- |
+| bankAccountId    | number   | Üye iş yerinin banka hesap ID'sini alır veya belirler |
+| bankName         | string   | Üye iş yerinin banka adını alır veya belirler         |
+| branchCode       | string   | Üye iş yerinin şube kodunu alır veya belirler         |
+| iban             | string   | IBAN numarasını alır veya belirler                    |
+| accountCode      | string   | Üye iş yerinin hesap kodunu alır veya belirler        |
+| description      | string   | Açıklamayı alır veya belirler                         |
+| currency         | string   | Para birimini alır veya belirler                      |
 
 ### Servis Methodu
 
 #### Kullanım Amacı
 
-Yetkili satıcı için banka hesaplarını döndürür.
+Üye iş yeri için banka hesaplarını döndürür.
 
 | **Method**      | **Params** | **Return Type**                |
 | --------------- | ---------- | ------------------------------ |
@@ -335,7 +335,7 @@ function getBankAccounts() {
 
 ## Para Çekim İşlemi
 
-Satıcılar için para çekme talepleri oluşturur. Bu işlemi gerçekleştirmek için `Banking` hizmetinde `withdrawal` methodunu kullanın.
+Üye iş yerleri için para çekme talepleri oluşturur. Bu işlemi gerçekleştirmek için `Banking` hizmetinde `withdrawal` methodunu kullanın.
 
 ### BankingWithdrawalOptions 
 
@@ -350,7 +350,7 @@ Satıcılar için para çekme talepleri oluşturur. Bu işlemi gerçekleştirmek
 
 #### Kullanım Amacı
 
-Yetkili satıcı için belirli bir banka hesabından para çekme talebi oluşturur.
+Üye iş yeri için belirli bir banka hesabından para çekme talebi oluşturur.
 
 | **Method** | **Params**               | **Return Type**         |
 | ---------- | ------------------------ | ----------------------- |
@@ -381,7 +381,7 @@ function withdrawal() {
 | 105           | Yetersiz bakiye                             |
 | 115           | Talep edilen miktar minimum limitin altında |
 | 120           | Banka hesabı bulunamadı                     |
-| 247           | Satıcı hesabı aktif değil                   |
+| 247           | Üye iş yeri hesabı aktif değil              |
 
 # <a name="cash-deposit">Fiziksel Nokta Entegrasyonu</a> 
 
@@ -397,7 +397,7 @@ Nakit para yükleme bilgilerini döndürür. Bu işlemi gerçekleştirmek için 
 
 | **Değişken Adı**  | **Tipi** | **Açıklama**                                                 |
 | ----------------- | -------- | ------------------------------------------------------------ |
-| merchantReference | string   | Satıcının referans numarasını alır veya belirler.            |
+| merchantReference | string   | Üye iş yerinin referans numarasını alır veya belirler.       |
 | id                | number   | Nakit para yükleme Id'sini alır veya belirler.               |
 | createdAt         | Date     | Nakit para yükleme işleminin yapıldığı alır veya belirler.   |
 | amount            | number   | Nakit para yükleme işleminin tutarını alır veya belirler.    |
@@ -447,7 +447,7 @@ Kullanıcının telefon numarasını kullanarak fiziksel noktadan kullanıcıya 
 | ----------------- | -------- | ------------------------------------------------------------ |
 | phoneNumber       | string   | Papara hesabına kayıtlı cep telefonu numarasını alır veya belirler. |
 | amount            | number   | Yüklenecek para tutarını alır veya belirler. Bu tutar ödemeyi alan kullanıcının hesabına aktarılacaktır. Üye işyeri hesabından düşülecek tutar tam olarak bu sayı olacaktır. |
-| merchantReference | string   | Satıcı referans numarasını alır veya belirler. Nakit yükleme işlemlerinde yanlış tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısasüre önce gönderilmiş ve başarılı bir merchantReference, yeni bir taleple yeniden gönderilirse, istek başarısız olur. Başarısız isteklerle gönderilen MerchantReference yeniden gönderilebilir. |
+| merchantReference | string   | Üye iş yeri referans numarasını alır veya belirler. Nakit yükleme işlemlerinde yanlış tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısasüre önce gönderilmiş ve başarılı bir merchantReference, yeni bir taleple yeniden gönderilirse, istek başarısız olur. Başarısız isteklerle gönderilen MerchantReference yeniden gönderilebilir. |
 
 ### Servis Methodu
 
@@ -474,7 +474,7 @@ function createWithPhoneNumber() {
 
 ## Referans Numarasına Göre Nakit Para Yükleme İşlemine Erişim
 
-Satıcı referans bilgileri ile birlikte fiziksel noktadan para yükleme işlemine ait bilgileri döndürür. Bu işlemi gerçekleştirmek için `CashDeposit` servisinde bulunan `getCashDepositByReference` methodunu kullanın. `reference` gönderillmelidir.
+Üye iş yeri referans bilgileri ile birlikte fiziksel noktadan para yükleme işlemine ait bilgileri döndürür. Bu işlemi gerçekleştirmek için `CashDeposit` servisinde bulunan `getCashDepositByReference` methodunu kullanın. `reference` gönderillmelidir.
 
 ### CashDepositByReferenceOptions
 
@@ -488,7 +488,7 @@ Satıcı referans bilgileri ile birlikte fiziksel noktadan para yükleme işlemi
 
 #### Kullanım Amacı
 
-Satıcının benzersiz referans numarasını kullanarak bir nakit para yükleme nesnesi döndürür.
+Üye iş yerinin benzersiz referans numarasını kullanarak bir nakit para yükleme nesnesi döndürür.
 
 | **Method**                | **Params**                    | **Return Type**                 |
 | ------------------------- | ----------------------------- | ------------------------------- |
@@ -517,7 +517,7 @@ Fiziksel noktadan Papara numarası ile kullanıcıya para yatırır. Bu işlemi 
 | ----------------- | -------- | ------------------------------------------------------------ |
 | accountNumber     | number   | Hesap numarasını alır veya belirler. Nakit yükleme yapılacak kullanıcının Papara hesap numarasıdır. |
 | amount            | number   | Yüklenecek para tutarını alır veya belirler. Bu tutar ödemeyi alan kullanıcının hesabına aktarılacaktır. Üye işyeri hesabından düşülecek tutar tam olarak bu sayı olacaktır. |
-| merchantReference | string   | Satıcı referans numarasını alır veya belirler. Nakit yükleme işlemlerinde yanlış tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısasüre önce gönderilmiş ve başarılı bir merchantReference, yeni bir taleple yeniden gönderilirse, istek başarısız olur. Başarısız isteklerle gönderilen MerchantReference yeniden gönderilebilir. |
+| merchantReference | string   | Üye iş yeri referans numarasını alır veya belirler. Nakit yükleme işlemlerinde yanlış tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısasüre önce gönderilmiş ve başarılı bir merchantReference, yeni bir taleple yeniden gönderilirse, istek başarısız olur. Başarısız isteklerle gönderilen MerchantReference yeniden gönderilebilir. |
 
 ### Servis Methodu
 
@@ -555,7 +555,7 @@ Fiziksel noktadan TCKN ile kullanıcıya para yatırır. Bu işlemi yapmak için
 | ----------------- | -------- | ------------------------------------------------------------ |
 | tckn              | number   | Nakit yükleme yapılacak kullanıcının TC kimlik numarasını alır veya belirler. |
 | amount            | number   | Yüklenecek para tutarını alır veya belirler. Bu tutar ödemeyi alan kullanıcının hesabına aktarılacaktır. Üye işyeri hesabından düşülecek tutar tam olarak bu sayı olacaktır. |
-| merchantReference | string   | Satıcı referans numarasını alır veya belirler. Nakit yükleme işlemlerinde yanlış tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısasüre önce gönderilmiş ve başarılı bir merchantReference, yeni bir taleple yeniden gönderilirse, istek başarısız olur. Başarısız isteklerle gönderilen MerchantReference yeniden gönderilebilir. |
+| merchantReference | string   | Üye iş yeri referans numarasını alır veya belirler. Nakit yükleme işlemlerinde yanlış tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısasüre önce gönderilmiş ve başarılı bir merchantReference, yeni bir taleple yeniden gönderilirse, istek başarısız olur. Başarısız isteklerle gönderilen MerchantReference yeniden gönderilebilir. |
 
 ### Servis Methodu
 
@@ -594,7 +594,7 @@ Fiziksel noktadan TCKN ile kullanıcıya ön ödemesiz olarak para yatırır. Bu
 | createdAt         | string   | Ön ödemesiz para yükleme işleminin oluşturulma tarihini alır veya belirler. |
 | amount            | number   | Ön ödemesiz para yükleme işleminin tutarını alır veya belirler. |
 | currency          | number   | Ön ödemesiz para yükleme işleminin para birimini alır veya belirler. |
-| merchantReference | string   | Satıcı referans numarasını alır veya belirler.               |
+| merchantReference | string   | Üye iş yeri referans numarasını alır veya belirler.          |
 | userFullName      | string   | Kullanıcının tam adını alır veya belirler.                   |
 
 ### CashDepositToTcknOptions
@@ -605,7 +605,7 @@ Fiziksel noktadan TCKN ile kullanıcıya ön ödemesiz olarak para yatırır. Bu
 | ----------------- | -------- | ------------------------------------------------------------ |
 | tckn              | number   | Nakit yükleme yapılacak kullanıcının TC kimlik numarasını alır veya belirler. |
 | amount            | number   | Yüklenecek para tutarını alır veya belirler. Bu tutar ödemeyi alan kullanıcının hesabına aktarılacaktır. Üye işyeri hesabından düşülecek tutar tam olarak bu sayı olacaktır. |
-| merchantReference | string   | Satıcı referans numarasını alır veya belirler. Nakit yükleme işlemlerinde yanlış tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısasüre önce gönderilmiş ve başarılı bir merchantReference, yeni bir taleple yeniden gönderilirse, istek başarısız olur. Başarısız isteklerle gönderilen MerchantReference yeniden gönderilebilir. |
+| merchantReference | string   | Üye iş yeri referans numarasını alır veya belirler. Nakit yükleme işlemlerinde yanlış tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısasüre önce gönderilmiş ve başarılı bir merchantReference, yeni bir taleple yeniden gönderilirse, istek başarısız olur. Başarısız isteklerle gönderilen MerchantReference yeniden gönderilebilir. |
 
 ### Servis Methodu
 
@@ -644,7 +644,7 @@ Fiziksel noktadan Papara'ya kayıtlı ulusal kimlik numarası ile kullanıcıya 
 | createdAt         | string   | Para yükleme işleminin oluşturulma tarihini alır veya belirler |
 | amount            | number   | Para yükleme işleminin tutarını alır veya belirler           |
 | currency          | number   | Para yükleme işleminin para birimini alır veya belirler      |
-| merchantReference | string   | Satıcı referans numarasın alır veya belirler                 |
+| merchantReference | string   | Üye iş yeri referans numarasın alır veya belirler            |
 | userFullName      | string   | Kullanıcının tam adını alır veya belirler                    |
 
 ### CashDepositTcknControlOptions
@@ -656,7 +656,7 @@ Fiziksel noktadan Papara'ya kayıtlı ulusal kimlik numarası ile kullanıcıya 
 | phoneNumber       | string   | Kullanıcının telefon numarasını alır veya belirler. Ödemeyi alacak kullanıcının Papara'da kayıtlı cep telefonu numarasıdır. Bir ülke kodu içermeli ve + ile başlamalıdır. |
 | tckn              | number   | Nakit yükleme yapılacak kullanıcının TC kimlik numarasını alır veya belirler. |
 | amount            | number   | Miktarı alır veya belirler. Ödeme işleminin tutarıdır. Bu tutar ödemeyi alan kullanıcının hesabına aktarılacaktır. Bu rakam artı işlem ücreti üye işyeri hesabından tahsil edilecektir |
-| merchantReference | string   | Satıcı referans numarasını alır veya belirler. Nakit yükleme işlemlerinde yanlış tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısasüre önce gönderilmiş ve başarılı bir merchantReference, yeni bir taleple yeniden gönderilirse, istek başarısız olur. Başarısız isteklerle gönderilen MerchantReference yeniden gönderilebilir. |
+| merchantReference | string   | Üye iş yeri referans numarasını alır veya belirler. Nakit yükleme işlemlerinde yanlış tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısasüre önce gönderilmiş ve başarılı bir merchantReference, yeni bir taleple yeniden gönderilirse, istek başarısız olur. Başarısız isteklerle gönderilen MerchantReference yeniden gönderilebilir. |
 
 ### Servis Methodu
 
@@ -951,7 +951,7 @@ function settlements() {
 | **Hata Kodu** | **Hata Açıklaması**                                          |
 | ------------- | ------------------------------------------------------------ |
 | 100           | Kullanıcı bulunamadı.                                        |
-| 101           | Satıcı bilgisi bulunamadı.                                   |
+| 101           | Üye iş yeri bilgisi bulunamadı.                              |
 | 105           | Yetersiz bakiye.                                             |
 | 107           | Kullanıcı bu işlem ile toplam işlem limitini aşıyor.         |
 | 111           | Kullanıcı bu işlem ile aylık toplam işlem limitini aşıyor.   |
@@ -996,7 +996,7 @@ Bu bölüm, ödemelerini kullanıcılarına hızlı, güvenli ve yaygın bir şe
 
 #### Kullanım Amacı
 
-Yetkili satıcı için ödeme dağıtım bilgisine erişmek için kullanılır
+Üye iş yeri için ödeme dağıtım bilgisine erişmek için kullanılır
 
 | **Method**     | **Params**            | **Return Type**                 |
 | -------------- | --------------------- | ------------------------------- |
@@ -1029,7 +1029,7 @@ Referans numarası kullanarak ödeme dağıtım süreci hakkında bilgi verir. B
 
 #### Kullanım Amacı
 
-Yetkili satıcı için ödeme bilgisine erişmek için kullanılır
+Üye iş yeri için ödeme bilgisine erişmek için kullanılır
 
 | **Method**                | **Params**                    | **Return Type**                 |
 | ------------------------- | ----------------------------- | ------------------------------- |
@@ -1065,13 +1065,13 @@ Papara numarasına para gönderin. Bu işlemi gerçekleştirmek için `MassPayme
 | amount            | number | Miktarı alır veya belirler. Ödeme işleminin tutarıdır. Bu tutar ödemeyi alan kullanıcının hesabına aktarılacaktır. Bu rakam artı işlem ücreti üye işyeri hesabından tahsil edilecektir. |
 | massPaymentId     | string   | Ödeme ID'sini alır veya belirler. Ödeme işlemlerinde hatalı tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısa süre önce gönderilmiş ve başarılı olan bir massPaymentId yeni bir taleple tekrar gönderilirse, istek başarısız olur. |
 | turkishNationalId | number   | TC kimlik numarasını alır veya belirler. Ödemeyi alacak kullanıcının gönderdiği kimlik bilgilerinin Papara sisteminde kontrolünü sağlar. Kimlik bilgilerinde bir çelişki olması durumunda işlem gerçekleşmeyecektir. |
-| description       | string   | Açıklamayı alır veya ayarlar. Satıcı tarafından sağlanan işlemin açıklamasıdır. Zorunlu bir alan değildir. Gönderilirse işlem açıklamalarında alıcı tarafından görülür. |
+| description       | string   | Açıklamayı alır veya ayarlar. Üye iş yeri tarafından sağlanan işlemin açıklamasıdır. Zorunlu bir alan değildir. Gönderilirse işlem açıklamalarında alıcı tarafından görülür. |
 
 ### Servis Methodu
 
 #### Kullanım Amacı
 
-Yetkili satıcı için verilen hesap numarasına ödeme göndermek için kullanılır
+Üye iş yeri için verilen hesap numarasına ödeme göndermek için kullanılır
 
 | **Method**                         | **Params**                       | **Return Type**                 |
 | ---------------------------------- | -------------------------------- | ------------------------------- |
@@ -1107,13 +1107,13 @@ Papara'da kayıtlı e-posta adresine para gönderin. Bu işlemi gerçekleştirme
 | amount            | number   | Miktarı alır veya belirler. Ödeme işleminin tutarıdır. Bu tutar ödemeyi alan kullanıcının hesabına aktarılacaktır. Bu rakam artı işlem ücreti üye işyeri hesabından tahsil edilecektir |
 | massPaymentId     | string   | Ödeme ID'sini alır veya belirler. Ödeme işlemlerinde hatalı tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısa süre önce gönderilmiş ve başarılı olan bir massPaymentId yeni bir taleple tekrar gönderilirse, istek başarısız olur. |
 | turkishNationalId | number   | TC kimlik numarasını alır veya belirler. Ödemeyi alacak kullanıcının gönderdiği kimlik bilgilerinin Papara sisteminde kontrolünü sağlar. Kimlik bilgilerinde bir çelişki olması durumunda işlem gerçekleşmeyecektir. |
-| description       | string   | Açıklamayı alır veya ayarlar. Satıcı tarafından sağlanan işlemin açıklamasıdır. Zorunlu bir alan değildir. Gönderilirse işlem açıklamalarında alıcı tarafından görülür. |
+| description       | string   | Açıklamayı alır veya ayarlar. Üye iş yeri tarafından sağlanan işlemin açıklamasıdır. Zorunlu bir alan değildir. Gönderilirse işlem açıklamalarında alıcı tarafından görülür. |
 
 ### Servis Methodu
 
 #### Kullanım Amacı
 
-Yetkili satıcı için verilen e-posta adresine ödeme göndermek için kullanılır
+Üye iş yeri için verilen e-posta adresine ödeme göndermek için kullanılır
 
 | **Method**                 | **Params**                | **Return Type**                 |
 | -------------------------- | ------------------------- | ------------------------------- |
@@ -1148,13 +1148,13 @@ Papara'da kayıtlı telefon numarasına para gönderin. Bu işlemi gerçekleşti
 | amount            | number   | Miktarı alır veya belirler. Ödeme işleminin tutarıdır. Bu tutar ödemeyi alan kullanıcının hesabına aktarılacaktır. Bu rakam artı işlem ücreti üye işyeri hesabından tahsil edilecektir |
 | massPaymentId     | string   | Ödeme ID'sini alır veya belirler. Ödeme işlemlerinde hatalı tekrarları önlemek için üye işyeri tarafından gönderilen benzersiz değerdir. Kısa süre önce gönderilmiş ve başarılı olan bir massPaymentId yeni bir taleple tekrar gönderilirse, istek başarısız olur. |
 | turkishNationalId | number   | TC kimlik numarasını alır veya belirler. Ödemeyi alacak kullanıcının gönderdiği kimlik bilgilerinin Papara sisteminde kontrolünü sağlar. Kimlik bilgilerinde bir çelişki olması durumunda işlem gerçekleşmeyecektir. |
-| description       | string   | Açıklamayı alır veya ayarlar. Satıcı tarafından sağlanan işlemin açıklamasıdır. Zorunlu bir alan değildir. Gönderilirse işlem açıklamalarında alıcı tarafından görülür. |
+| description       | string   | Açıklamayı alır veya ayarlar. Üye iş yeri tarafından sağlanan işlemin açıklamasıdır. Zorunlu bir alan değildir. Gönderilirse işlem açıklamalarında alıcı tarafından görülür. |
 
 ### Servis Methodu
 
 #### Kullanım Amacı
 
-Yetkili satıcı için verilen telefon numarasına ödeme göndermek için kullanılır
+Üye iş yeri için verilen telefon numarasına ödeme göndermek için kullanılır
 
 | **Method**                       | **Params**                      | **Return Type**                 |
 | -------------------------------- | ------------------------------- | ------------------------------- |
@@ -1184,7 +1184,7 @@ function createMassPaymentWithPhoneNumber() {
 | 107           | Alıcı bakiye limitini aşıyor. Basit hesaplar için mümkün olan en yüksek bakiye 750 TL'dir. |
 | 111           | Alıcı aylık işlem limitini aşıyor. Basit hesaplar tanımlı kaynaktan aylık toplam 2000 TL ödeme alabilir. |
 | 133           | MassPaymentID yakın zamanda kullanıldı.                      |
-| 997           | Ödemeleri dağıtma yetkiniz yok. Müşteri temsilcinizle iletişime geçebilir ve satıcı hesabınıza bir ödeme dağıtım tanımı talep edebilirsiniz. |
+| 997           | Ödemeleri dağıtma yetkiniz yok. Müşteri temsilcinizle iletişime geçebilir ve üye iş yeri hesabınıza bir ödeme dağıtım tanımı talep edebilirsiniz. |
 | 998           | Gönderdiğiniz parametreler beklenen formatta değil. Örnek: Müşteri numarası 10 haneden az. Bu durumda, hata mesajı format hatasının ayrıntılarını içerir. |
 | 999           | Papara sisteminde bir hata oluştu.                           |
 
@@ -1202,10 +1202,10 @@ function createMassPaymentWithPhoneNumber() {
 
 | **Değişken Adı**         | **Tipi** | **Açıklama**                                                 |
 | ------------------------ | -------- | ------------------------------------------------------------ |
-| merchant                 | Account  | Satıcıyı alır veya belirler                                  |
+| merchant                 | Account  | Üye iş yerlerini alır veya belirler                          |
 | id                       | string   | ID'yi alır veya belirler                                     |
 | CreatedAt                | date     | Ödemenin oluşturulma tarihini alır veya belirler             |
-| merchantId               | string   | Satıcı ID'sini alır veya belirler                            |
+| merchantId               | string   | Üye iş yeri ID'sini alır veya belirler                       |
 | userId                   | string   | Kullanıcı ID'sini alır veya belirler                         |
 | paymentMethod            | number   | Ödeme Yöntemini alır veya belirler. <br />0 - Kullanıcı, mevcut Papara bakiyesiyle işlemi tamamladı <br />1 - Kullanıcı, işlemi daha önce tanımlanmış bir banka / kredi kartı ile tamamladı. <br />2 - Kullanıcı, mobil ödeme yoluyla işlemi tamamladı. |
 | paymentMethodDescription | string   | Ödeme yöntemi açıklamasını alır veya belirler.               |
@@ -1220,7 +1220,7 @@ function createMassPaymentWithPhoneNumber() {
 | notificationDone         | boolean  | Bildirimin yapılıp yapılmadığını alır veya belirler.         |
 | redirectUrl              | string   | Yönlendirme URL'ini alır veya belirler.                      |
 | raymentUrl               | string   | Ödeme URL'ini alır veya belirler.                            |
-| merchantSecretKey        | string   | Satıcı gizli anahtarını alır veya belirler.                  |
+| merchantSecretKey        | string   | Üye iş yeri gizli anahtarını alır veya belirler.             |
 | returningRedirectUrl     | string   | Geri dönen yönlendirme URL'ini alır veya belirler.           |
 | turkishNationalId        | number   | TC kimlik numarasını alır veya belirler.                     |
 
@@ -1269,7 +1269,7 @@ function getPayment() {
 
 #### Kullanım Amacı
 
-Yetkili satıcı için ödeme ve bakiye bilgilerine erişmek istenildiğinde kullanılır.
+Üye iş yeri için ödeme ve bakiye bilgilerine erişmek istenildiğinde kullanılır.
 
 | **Method**     | **Params**                   | **Return Type**             |
 | -------------- | ---------------------------- | --------------------------- |
@@ -1335,7 +1335,7 @@ function createPayment() {
 
 ## İade İşlemi 
 
-Satıcının ödeme ID'siyle tamamlanmış bir ödemesini iade etmesini sağlar. Bu işlemi gerçekleştirmek için `Payment` servisinde bulunan `refund` yöntemini kullanın. `id` gönderilmelidir.
+Üye iş yerinin ödeme ID'siyle tamamlanmış bir ödemesini iade etmesini sağlar. Bu işlemi gerçekleştirmek için `Payment` servisinde bulunan `refund` yöntemini kullanın. `id` gönderilmelidir.
 
 ### PaymentRefundOptions
 
@@ -1349,7 +1349,7 @@ Satıcının ödeme ID'siyle tamamlanmış bir ödemesini iade etmesini sağlar.
 
 #### Kullanım Amacı
 
-Yetkili satıcı için bir ödemenin iade edileceği durumlarda kullanılır.
+Üye iş yeri için bir ödemenin iade edileceği durumlarda kullanılır.
 
 | **Method** | **Params**           | **Return Type**         |
 | ---------- | -------------------- | ----------------------- |
@@ -1368,7 +1368,7 @@ function refund() {
 
 ## Ödemeleri Listeleme
 
-Satıcının tamamlanan ödemelerini sıralı bir şekilde listeler. Bu işlemi gerçekleştirmek için `Payment` servisinde buluan `list` methodunu kullanın. `pageIndex`ve `pageItemCount ` gönderilmelidir.
+Üye iş yerinin tamamlanan ödemelerini sıralı bir şekilde listeler. Bu işlemi gerçekleştirmek için `Payment` servisinde buluan `list` methodunu kullanın. `pageIndex`ve `pageItemCount ` gönderilmelidir.
 
 ### PaymentListItem
 
@@ -1378,7 +1378,7 @@ Satıcının tamamlanan ödemelerini sıralı bir şekilde listeler. Bu işlemi 
 | ------------------------ | -------- | ------------------------------------------------------------ |
 | id                       | string   | Ödeme ID'sini alır veya belirler.                            |
 | createdAt                | Date     | Ödemenin yapıldığı tarihi alır veya belirler.                |
-| merchantId               | string   | Satıcı ID'sini alır veya belirler                            |
+| merchantId               | string   | Üye iş yeri ID'sini alır veya belirler                       |
 | userId                   | string   | Kullanıcı ID'sini alır veya belirler.                        |
 | paymentMethod            | number   | Ödeme Yöntemini alır veya belirler<br />0 - Kullanıcı, mevcut Papara bakiyesiyle işlemi tamamladı <br />1 - Kullanıcı, işlemi daha önce tanımlanmış bir banka / kredi kartı ile tamamladı. <br />2 - Kullanıcı, mobil ödeme yoluyla işlemi tamamladı. |
 | paymentMethodDescription | string   | Ödeme açıklamasını alır veya belirler.                       |
@@ -1393,7 +1393,7 @@ Satıcının tamamlanan ödemelerini sıralı bir şekilde listeler. Bu işlemi 
 | notificationDone         | boolean  | Bildirimin yapılıp yapılmadığını alır veya belirler          |
 | redirectUrl              | string   | Yönlendirme URL'ini alır veya belirler                       |
 | paymentUrl               | string   | Ödeme URL'ini alır veya belirler                             |
-| merchantSecretKey        | string   | Satıcı gizli anahtarını alır veya belirler                   |
+| merchantSecretKey        | string   | Üye iş yeri gizli anahtarını alır veya belirler              |
 | returningRedirectUrl     | string   | Geri dönüş URL'ini alır veya belirler                        |
 | turkishNationalId        | number   | TC Kimlik numarasını alır veya belirler                      |
 
@@ -1410,7 +1410,7 @@ Satıcının tamamlanan ödemelerini sıralı bir şekilde listeler. Bu işlemi 
 
 #### Kullanım Amacı
 
-Yetkili satıcılar için tamamlanmış ödemeleri yeniden eskiye doğru sıralayacal bir şekilde görüntülemek için kullanılır
+Üye iş yerleri için tamamlanmış ödemeleri yeniden eskiye doğru sıralayacal bir şekilde görüntülemek için kullanılır
 
 | **Method** | **Params**         | **Return Type**                   |
 | ---------- | ------------------ | --------------------------------- |
