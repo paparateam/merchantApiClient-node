@@ -23,6 +23,11 @@ export interface MassPaymentToEmailOptions {
   turkishNationalId?: number;
 
   /**
+   * Gets or sets payment currency. Values are “0”, “1”, “2”, “3”.
+   */
+  currency?: number;
+
+  /**
    * Gets or sets description. Description of the transaction provided by the merchant. It is not a required field. If sent, the customer sees in the transaction descriptions.
    */
   description: string;

@@ -31,4 +31,9 @@ export interface PaymentCreateOptions {
    * Gets or sets national identity number.It provides the control of the identity information sent by the user who will receive the payment, in the Papara system. In case of a conflict of credentials, the transaction will not take place.
    */
   turkishNationalId?: number;
+
+  /**
+   * Gets or sets payment currency. Values are “0”, “1”, “2”, “3”.
+   */
+  currency?: number;
 }
