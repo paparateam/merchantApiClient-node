@@ -1171,6 +1171,37 @@ function createPayment() {
 }
 ```
 
+###  Validating Payment Result 
+
+Following the user's successful completion of the transaction **before the user is directed to the merchant**, Papara makes a  **HTTP POST** request to the `notificationUrl` sent by the merchant with the payment request.
+
+In the `body` part of the request, there will be a JSON object with the same structure as the `data` object of the return value creating a payment request. Sample:
+
+```json
+{
+    "merchantId": "123-4564-8484",
+    "userId": "123-987-654",
+    "paymentMethod": 1,
+    "paymentMethodDescription": "Credit/Debit Card",
+    "referenceId": "Merchant Reference",
+    "orderDescription": "Description that will be displayed to user on payment page",
+    "status": 1,
+    "statusDescription": "Completed",    
+    "amount": 99.99,
+    "fee": 1.98,
+    "currency": "TRY",
+    "notificationUrl": "https://www.papara.com/notification",
+    "notificationDone": false,
+    "redirectUrl": "https://www.papara.com/userredirect",
+    "merchantSecretKey": "Secret key on the merchant panel",
+    "paymentUrl": "www.papara.com/pid?6666-5555-ABCD",
+    "returningRedirectUrl": "",
+    "id": "6666-5555-ABCD",
+    "createdAt": "2017-06-09T06:26:15.100Z",
+    "turkishNationalId": 12345678901,
+}
+```
+
 ## Refund 
 
 Refunds a completed payment of the merchant with the provided payment ID .To perform this operation use `refund` method on `Payment` service. `id` should be provided.
