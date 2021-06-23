@@ -23,7 +23,7 @@ export interface MassPayment {
   amount: number;
 
   /**
-   * Gets or sets currency.Values are “0”, “1”, “2”, “3”.
+   * Gets or sets currency.Values are “0” (TRY), “1” (USD), “2” (EUR), “3” (GBP).
    */
   currency: number;
 

@@ -10,6 +10,10 @@ import {
   MassPaymentToPaparaNumberOptions,
   MassPaymentToPhoneNumberOptions
 } from "../options";
+import { RecurringMassPaymentToAccountNumberOptions } from "../options/recurringMassPaymentToAccountNumberOptions";
+import { RecurringMassPayment } from "../entities/recurringMassPayment";
+import { RecurringMassPaymentToPhoneNumberOptions } from "../options/recurringMassPaymentToPhoneNumberOptions";
+import { RecurringMassPaymentToEmailOptions } from "../options/recurringMassPaymentToEmailOptions";
 
 /**
  * Mass payment service will be used for getting mass payment info and sending payments to account number, mail address and phone number.
@@ -109,6 +113,67 @@ export class MassPaymentService {
 
     return result;
   };
+
+
+ /**
+  * Creates a recurring mass payment to given account number for authorized merchant 
+  * 
+  * @param RecurringMassPaymentToAccountNumberOptions recurring mass payment to account number options
+  * @returns PaparaSingleResult<RecurringMassPayment> recurring mass payment information
+  */ 
+createRecurringMassPaymentWithAccountNumber = async(
+  options: RecurringMassPaymentToAccountNumberOptions
+): Promise<PaparaSingleResult<RecurringMassPayment>> =>{
+const client = new PaparaHttpClient<PaparaSingleResult<RecurringMassPayment>>();
+
+const result = await client.request
+(
+  HttpMethod.POST,
+  "/recurringmasspayment",
+  options,
+  this.requestOptions);
+  return result;
+};
+  
+ /**
+  * Creates a recurring mass payment to given phone number for authorized merchant 
+  * 
+  * @param RecurringMassPaymentToPhoneNumberOptions recurring mass payment to Phone number options
+  * @returns PaparaSingleResult<RecurringMassPayment> recurring mass payment information
+  */ 
+  createRecurringMassPaymentWithPhoneNumber = async(
+    options: RecurringMassPaymentToPhoneNumberOptions
+  ): Promise<PaparaSingleResult<RecurringMassPayment>> =>{
+  const client = new PaparaHttpClient<PaparaSingleResult<RecurringMassPayment>>();
+  
+  const result = await client.request
+  (
+    HttpMethod.POST,
+    "/recurringmasspayment/phone",
+    options,
+   this.requestOptions);
+   return result;
+  };
+
+/**
+  * Creates a recurring mass payment to given phone number for authorized merchant 
+  * 
+  * @param RecurringMassPaymentToPhoneNumberOptions recurring mass payment to Phone number options
+  * @returns PaparaSingleResult<RecurringMassPayment> recurring mass payment information
+  */ 
+ createRecurringMassPaymentWithEmail = async(
+  options: RecurringMassPaymentToEmailOptions
+): Promise<PaparaSingleResult<RecurringMassPayment>> =>{
+const client = new PaparaHttpClient<PaparaSingleResult<RecurringMassPayment>>();
+
+const result = await client.request
+(
+  HttpMethod.POST,
+  "/recurringmasspayment/email",
+  options,
+ this.requestOptions);
+ return result;
+};
 
   /**
    * Returns mass payment information for authorized merchant.
