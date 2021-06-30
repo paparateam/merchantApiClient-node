@@ -12,6 +12,8 @@
 
 <a href="#mass-payment">Ödeme Dağıtma</a>
 
+<a href="#recurring-mass-payment">Düzenli Ödeme Dağıtma</a>
+
 <a href="#payments">Ödeme Alma</a>
 
 <a href="#validation">Doğrulama</a>
@@ -1190,6 +1192,174 @@ function createMassPaymentWithPhoneNumber() {
 | 997           | Ödemeleri dağıtma yetkiniz yok. Müşteri temsilcinizle iletişime geçebilir ve üye iş yeri hesabınıza bir ödeme dağıtım tanımı talep edebilirsiniz. |
 | 998           | Gönderdiğiniz parametreler beklenen formatta değil. Örnek: Müşteri numarası 10 haneden az. Bu durumda, hata mesajı format hatasının ayrıntılarını içerir. |
 | 999           | Papara sisteminde bir hata oluştu.                           |
+
+# <a name="recurring-mass-payment"> Düzenli Ödeme Dağıtma</a> 
+
+Bu bölüm, ödemelerini kullanıcılarına hızlı, güvenli ve yaygın bir şekilde Papara üzerinden düzenli bir şekilde dağıtmak isteyen iş yerleri için hazırlanmış teknik entegrasyon bilgilerini içerir.
+
+Düzenli dağıtım istekleri için, period ve çalışma günü bilgisini göndererek günlük, haftalık ve aylık düzenli dağıtım isteği tanımlayabilirsiniz.
+
+Günlük gönderimler için çalışma günü bilgisi parametresi 0 olarak kabul edilmektedir.
+
+### Recurring Mass Payment Model
+
+`RecurringMassPayment` sınıfı, `MassPayment` servisi tarafından API'den dönen ödeme dağıtım bilgilerini eşleştirmek için kullanılır.
+
+| **Değişken Adı** | **Tip**  | **Açıklama**                                                 |
+| ---------------- | -------- | ------------------------------------------------------------ |
+| MerchantId    | string   | Üye iş yeri ID'sini alır veya belirler.                         |
+| UserId        | string     | Kullanıcı ID'sini alır veya belirler.                         |
+| Period        | int | Düzenli ödeme talimatları için talimata ait periyot bilgisi.         |
+| ExecutionDay  | int | Ödemenin periyot içindeki çalışma günü bilgisi. Günlük olarak verilen talimatlar için bu değer 0 olarak kabul edilir.                           |
+| AccountNumber | int | Ödeme alacak kullanıcının 10 haneli Papara numarası. 1234567890 ya da PL1234567890 formatında olabilir. |
+| Message       | string | Mesaj bilgisini alır veya belirler.                               |
+| Amount | decimal | Ödeme işleminin tutarı. Ödemeyi alan kullanıcının hesabına tam olarak bu tutar transfer edilecektir. Üye işyeri hesabına bu rakam artı işlem ücreti yansıtılacaktır.                 |
+| Currency      | Currency   | Ödeme yapılacak para birimi.                               |
+
+## Papara Numarasına Düzenli Ödeme Gönderme
+
+Papara numarasına düzenli para gönderin. Bu işlemi gerçekleştirmek için `MassPayment` servisinde bulunan `CreateRecurringMassPaymentWithAccountNumber` methodunu kullanın. `AccountNumber`, `Amount`, `ExecutionDay`, `Description`  ve `Period` gönderilmelidir.
+
+### RecurringMassPaymentToAccountNumberOptions
+
+| **Değişken Adı** | **Tip**  | **Açıklama**                                                 |
+| ---------------- | -------- | ------------------------------------------------------------ |
+| AccountNumber | string | Ödeme alacak kullanıcının 10 haneli Papara numarası. 1234567890 ya da PL1234567890 formatında olabilir. |
+| Amount | decimal | Ödeme işleminin tutarı. Ödemeyi alan kullanıcının hesabına tam olarak bu tutar transfer edilecektir. Üye işyeri hesabına bu rakam artı işlem ücreti yansıtılacaktır.                 |
+| TurkishNationalId    | long?   | Ödeme alacak kullanıcının kimlik numarası. Ödeme alacak kullanıcının, Papara sistemindeki kimlik bilgisi ile gönderilen kimlik bilgisinin kontrolünü sağlar. Kimlik bilgileri uyuşmazlığı durumunda işlem gerçekleşmez.                         |
+| Currency      | Currency?   | Ödeme yapılacak para birimi.                               |
+| Period        | int | Düzenli ödeme talimatları için talimata ait periyot bilgisi.         |
+| ExecutionDay  | int | Ödemenin periyot içindeki çalışma günü bilgisi. Günlük olarak verilen talimatlar için bu değer 0 olarak kabul edilir.                           |
+| Description   | string | Ödeme alacak kullanıcının göreceği açıklama.                              |
+
+### Servis Methodu
+
+#### Kullanım Amacı
+
+Üye iş yeri için verilen hesap numarasına düzenli ödeme göndermek için kullanılır.
+
+| **Method**      | **Parametreler**                 | **Geri Dönüş Tipi**             |
+| --------------- | -------------------------------- | ------------------------------- |
+| CreateRecurringMassPaymentWithAccountNumber | RecurringMassPaymentToAccountNumberOptions | PaparaSingleResult |
+
+#### Kullanım Şekli
+
+```typescript
+function createRecurringMassPaymentWithAccountNumber() {
+    var result = await client.massPaymentService.createRecurringMassPaymentWithAccountNumber({
+      	accountNumber: config.PersonalAccountNumber.toString(),
+      	amount: 1,
+        turkishNationalId: config.TCKN, //opsiyonel
+        currency:1, //opsiyonel
+        period:1,
+        description: "Unit Test nodejs: RecurringMassPaymentToPaparaNumber",
+        executionDay:1
+    });
+    return result;
+}
+```
+
+
+## E-Posta Adresine Düzenli Ödeme Gönderme
+Papara'da kayıtlı bir E-posta adresine düzenli para gönderin. Bu işlemi gerçekleştirmek için `MassPayment` servisinde bulunan `CreateRecurringMassPaymentWithEmail` methodunu kullanın. `Email`, `Amount`, `TurkishNationalId`, `Period`, `Currency`, `ExecutionDay` ve `Description` gönderilmelidir.
+
+### RecurringMassPaymentToEmailOptions
+
+| **Değişken Adı** | **Tip**  | **Açıklama**                                                 |
+| ---------------- | -------- | ------------------------------------------------------------ |
+| Email | string | Ödeme alacak kullanıcının Papara'ya kayıtlı olan e-posta adresi. |
+| Amount | decimal | Ödeme işleminin tutarı. Ödemeyi alan kullanıcının hesabına tam olarak bu tutar transfer edilecektir. Üye işyeri hesabına bu rakam artı işlem ücreti yansıtılacaktır.                 |
+| TurkishNationalId    | long?   | Ödeme alacak kullanıcının kimlik numarası. Ödeme alacak kullanıcının, Papara sistemindeki kimlik bilgisi ile gönderilen kimlik bilgisinin kontrolünü sağlar. Kimlik bilgileri uyuşmazlığı durumunda işlem gerçekleşmez.                         |
+| Currency      | Currency?   | Ödeme yapılacak para birimi.                               |
+| Period        | int | Düzenli ödeme talimatları için talimata ait periyot bilgisi.         |
+| ExecutionDay  | int | Ödemenin periyot içindeki çalışma günü bilgisi. Günlük olarak verilen talimatlar için bu değer 0 olarak kabul edilir.                           |
+| Description   | string | Ödeme alacak kullanıcının göreceği açıklama.                              |
+
+### Servis Methodu
+
+#### Kullanım Amacı
+
+Üye iş yeri için verilen e-posta adresine düzenli ödeme göndermek için kullanılır.
+
+| **Method**      | **Parametreler**                 | **Geri Dönüş Tipi**             |
+| --------------- | -------------------------------- | ------------------------------- |
+| CreateRecurringMassPaymentWithEmail | RecurringMassPaymentToEmailOptions | PaparaSingleResult |
+
+#### Kullanım Şekli
+
+```typescript
+function createRecurringMassPaymentWithEmail () {
+    var result = await client.massPaymentService.createRecurringMassPaymentWithEmail ({
+      	email: config.PersonalEmail,
+      	amount: 1,
+        turkishNationalId: config.TCKN, //opsiyonel
+        currency:1, //opsiyonel
+        period:1,
+        description: "Unit Test nodejs: RecurringMassPaymentToEmail",
+        executionDay:1
+    });
+    return result;
+}
+```
+
+## Telefon Numarasına Düzenli Gönderme
+
+Papara'da kayıtlı telefon numarasına düzenli para gönderin. Bu işlemi gerçekleştirmek için `MassPayment` servisinde bulunan `CreateRecurringMassPaymentWithPhoneNumber` methodunu kullanın. `PhoneNumber`, `Amount`, `ExecutionDay`, `Description`  ve `Period` gönderilmelidir.
+
+### RecurringMassPaymentToPhoneNumberOptions
+
+| **Değişken Adı** | **Tip**  | **Açıklama**                                                 |
+| ---------------- | -------- | ------------------------------------------------------------ |
+| PhoneNumber | string | Ödeme alacak kullanıcının Papara'ya kayıtlı olan cep telefonu numarası. Ülke kodu içermeli ve + ile başlamalıdır. |
+| Amount | decimal | Ödeme işleminin tutarı. Ödemeyi alan kullanıcının hesabına tam olarak bu tutar transfer edilecektir. Üye işyeri hesabına bu rakam artı işlem ücreti yansıtılacaktır.                 |
+| TurkishNationalId    | long?   | Ödeme alacak kullanıcının kimlik numarası. Ödeme alacak kullanıcının, Papara sistemindeki kimlik bilgisi ile gönderilen kimlik bilgisinin kontrolünü sağlar. Kimlik bilgileri uyuşmazlığı durumunda işlem gerçekleşmez.                         |
+| Currency      | Currency?   | Ödeme yapılacak para birimi.                               |
+| Period        | int | Düzenli ödeme talimatları için talimata ait periyot bilgisi.         |
+| ExecutionDay  | int | Ödemenin periyot içindeki çalışma günü bilgisi. Günlük olarak verilen talimatlar için bu değer 0 olarak kabul edilir.                           |
+| Description   | string | Ödeme alacak kullanıcının göreceği açıklama.                              |
+
+
+### Servis Methodu
+
+#### Kullanım Amacı
+
+Üye iş yeri için verilen telefon numarasına düzenli ödeme göndermek için kullanılır.
+
+| **Method**      | **Parametreler**                 | **Geri Dönüş Tipi**             |
+| --------------- | -------------------------------- | ------------------------------- |
+| CreateRecurringMassPaymentWithPhoneNumber | RecurringMassPaymentToPhoneNumberOptions | PaparaSingleResult |
+
+#### Kullanım Şekli
+
+```typescript
+function createRecurringMassPaymentWithPhoneNumber  () {
+    var result = await client.massPaymentService.createRecurringMassPaymentWithPhoneNumber  ({
+      	phoneNumber: config.PersonalPhoneNumber,
+      	amount: 1,
+        turkishNationalId: config.TCKN, //optional
+        currency:1, //optional
+        period:1,
+        executionDay:1,
+        description: "Unit Test nodejs: RecurringMassPaymentToPhoneNumber"
+        
+    });
+    return result;
+}
+```
+
+## Olası Hatalar ve Hata Kodları
+
+| **Hata Kodu** | **Hata Açıklaması**                                          |
+| ------------- | ------------------------------------------------------------ |
+| 100           | Kullanıcı bulunamadı                                         |
+| 105           | Yetersiz bakiye                                              |
+| 107           | Alıcı bakiye limitini aşıyor. Basit hesaplar için mümkün olan en yüksek bakiye 750 TL'dir. |
+| 111           | Alıcı aylık işlem limitini aşıyor. Basit hesaplar tanımlı kaynaktan aylık toplam 2000 TL ödeme alabilir. |
+| 133           | MassPaymentID yakın zamanda kullanıldı.                      |
+| 997           | Ödemeleri dağıtma yetkiniz yok. Müşteri temsilcinizle iletişime geçebilir ve üye iş yeri hesabınıza bir ödeme dağıtım tanımı talep edebilirsiniz. |
+| 998           | Gönderdiğiniz parametreler beklenen formatta değil. Örnek: Müşteri numarası 10 haneden az. Bu durumda, hata mesajı format hatasının ayrıntılarını içerir. |
+| 999           | Papara sisteminde bir hata oluştu.                           |
+
 
 # <a name="payments">Ödeme Alma</a> 
 
