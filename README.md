@@ -1052,6 +1052,7 @@ function createMassPaymentWithPhoneNumber() {
 | 107            | Receiver exceeds balance limit. The highest possible balance for simple accounts is  750 TL. |
 | 111            | Receiver exceeds monthly transaction limit. Simple accounts can receive payments from a total of 2000 TL of defined resources per month. |
 | 133            | MassPaymentID was used recently.                             |
+| 398            | The transaction could not be performed because the user you want to send foreign currency to does not have a verified account.|
 | 997            | You  are not authorized to distribute payments. You can contact your customer representative and request a payment distribution definition to your merchant  account. |
 | 998            | The  parameters you submitted are not in the expected format. Example: Customer number less than 10 digits. In this case, the error message contains details of the format error. |
 | 999            | An error  occurred in the Papara system.                     |
@@ -1220,6 +1221,7 @@ function createRecurringMassPaymentWithPhoneNumber  () {
 | 107            | Receiver exceeds balance limit. The highest possible balance for simple accounts is  750 TL. |
 | 111            | Receiver exceeds monthly transaction limit. Simple accounts can receive payments from a total of 2000 TL of defined resources per month. |
 | 133            | MassPaymentID was used recently.                             |
+| 398            | The transaction could not be performed because the user you want to send foreign currency to does not have a verified account.|  
 | 997            | You  are not authorized to distribute payments. You can contact your customer representative and request a payment distribution definition to your merchant  account. |
 | 998            | The  parameters you submitted are not in the expected format. Example: Customer number less than 10 digits. In this case, the error message contains details of the format error. |
 | 999            | An error  occurred in the Papara system.                     |
