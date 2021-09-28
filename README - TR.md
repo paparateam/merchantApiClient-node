@@ -1189,6 +1189,7 @@ function createMassPaymentWithPhoneNumber() {
 | 107           | Alıcı bakiye limitini aşıyor. Basit hesaplar için mümkün olan en yüksek bakiye 750 TL'dir. |
 | 111           | Alıcı aylık işlem limitini aşıyor. Basit hesaplar tanımlı kaynaktan aylık toplam 2000 TL ödeme alabilir. |
 | 133           | MassPaymentID yakın zamanda kullanıldı.                      |
+| 398           | Döviz göndermek istediğin kullanıcı onaylı hesaba sahip olmadığı için işlemin gerçekleştirilemedi.|  
 | 997           | Ödemeleri dağıtma yetkiniz yok. Müşteri temsilcinizle iletişime geçebilir ve üye iş yeri hesabınıza bir ödeme dağıtım tanımı talep edebilirsiniz. |
 | 998           | Gönderdiğiniz parametreler beklenen formatta değil. Örnek: Müşteri numarası 10 haneden az. Bu durumda, hata mesajı format hatasının ayrıntılarını içerir. |
 | 999           | Papara sisteminde bir hata oluştu.                           |
@@ -1356,6 +1357,7 @@ function createRecurringMassPaymentWithPhoneNumber  () {
 | 107           | Alıcı bakiye limitini aşıyor. Basit hesaplar için mümkün olan en yüksek bakiye 750 TL'dir. |
 | 111           | Alıcı aylık işlem limitini aşıyor. Basit hesaplar tanımlı kaynaktan aylık toplam 2000 TL ödeme alabilir. |
 | 133           | MassPaymentID yakın zamanda kullanıldı.                      |
+| 398           | Döviz göndermek istediğin kullanıcı onaylı hesaba sahip olmadığı için işlemin gerçekleştirilemedi.|  
 | 997           | Ödemeleri dağıtma yetkiniz yok. Müşteri temsilcinizle iletişime geçebilir ve üye iş yeri hesabınıza bir ödeme dağıtım tanımı talep edebilirsiniz. |
 | 998           | Gönderdiğiniz parametreler beklenen formatta değil. Örnek: Müşteri numarası 10 haneden az. Bu durumda, hata mesajı format hatasının ayrıntılarını içerir. |
 | 999           | Papara sisteminde bir hata oluştu.                           |
