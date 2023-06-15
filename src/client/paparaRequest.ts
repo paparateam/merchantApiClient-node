@@ -28,7 +28,7 @@ export class PaparaRequest {
   url_live = "https://merchant-api.papara.com";
 
   // Test environment URL.
-  url_test = "https://merchant.test.api.papara.com";
+  url_test = "https://merchant-api.test.papara.com";
 
   /**
    * Creates an instance of papara request.
