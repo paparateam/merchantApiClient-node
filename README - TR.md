@@ -24,7 +24,7 @@
 
 Papara ile entegre olmak için aşağıdaki adımları takip edebilirsiniz;
 
-1. API Anahtarınızı edinin. Böylece Papara doğrulama sistemi API isteklerinin kimliğini doğrulayabilir. API Anahtarınızı almak için https://merchant.test.papara.com/ URL adresine gidin. Başarıyla oturum açtıktan sonra, API Anahtarı https://merchant.test.papara.com/APIInfo adresinde görüntülenebilir.
+1. API Anahtarınızı edinin. Böylece Papara doğrulama sistemi API isteklerinin kimliğini doğrulayabilir. API Anahtarınızı almak için [https://merchant-api.test.papara.com/](https://merchant-api.test.papara.com/) URL adresine gidin. Başarıyla oturum açtıktan sonra, API Anahtarı [https://merchant-api.test.papara.com/APIInfo](https://merchant-api.test.papara.com/APIInfo) adresinde görüntülenebilir.
 
 2. Kütüphaneyi kurun. Böylece yazılımınız Papara API ile entegre olabilir. Kurulum işlemleri aşağıdaki gibidir.
 
