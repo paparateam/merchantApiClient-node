@@ -24,7 +24,7 @@
 
 Integrating Papara into your software requires following;
 
-1. Obtain your API Key. So Papara can authenticate integration’s API requests. To obtain your API Key, follow https://merchant.test.papara.com/ URL. After sucessfully logged in, API Key can be viewed on https://merchant.test.papara.com/APIInfo 
+1. Obtain your API Key. So Papara can authenticate integration’s API requests. To obtain your API Key, follow [https://merchant.test.papara.com/](https://merchant-api.test.papara.com/) URL. After sucessfully logged in, API Key can be viewed on [https://merchant-api.test.papara.com/APIInfo](https://merchant-api.test.papara.com/APIInfo)
 
 2. Install client library. So your integration can interact with the Papara API. Install operations are like following.
 
